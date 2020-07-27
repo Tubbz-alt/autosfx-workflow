@@ -35,33 +35,24 @@ dag = DAG(
     dagrun_timeout=900,
   )
 
-##### FILESENSORS
-
-#stream_file = FileSensor( task_id='stream_file',
-#    bash_command="""exit 0""",
-#    dag=dag,
-#  )
-
 ##### PROCESS DEFINITIONS
 
-merging = JIDOperator( task_id='merging',
+testexec = JIDOperator( task_id='testexec',
     experiment='abcd',
     run=12,
-    executable="/project/projectdirs/lcls/SFX_automation/merging/stream2mtz.slurm",
+    executable="/project/projectdirs/lcls/SFX_automation/docker/test-docker-image.slurm",
     parameters='',
     dag=dag,
   )
 
-phasing = JIDOperator( task_id='phasing',
+testlocalexec = JIDOperator( task_id='testlocalexec',
     experiment='abcd',
     run=12,
-    executable="/project/projectdirs/lcls/SFX_automation/phasing/phasing.slurm",
+    executable="/project/projectdirs/lcls/SFX_automation/docker/test-local-dependencies.slurm",
     parameters='',
     dag=dag,
   )
 
 #### DRAW THE DAG
 
-merging >> phasing
-
-
+testexec >> testlocalexec
